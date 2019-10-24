@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{437E5E92-6CCB-459A-B965-8FAD7D664009}|Default">
+  <MonoDevelop.Ide.ItemProperties.GWTest PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Goodwitch/Main.cs">
+    <Files>
+      <File FileName="GWTest/Program.cs" Line="9" Column="35" />
+      <File FileName="Goodwitch/Main.cs" Line="11" Column="6" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Goodwitch" expanded="True">
+            <Node name="Goodwitch" expanded="True">
+              <Node name="Properties" expanded="True" />
+            </Node>
+            <Node name="GWTest" expanded="True" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

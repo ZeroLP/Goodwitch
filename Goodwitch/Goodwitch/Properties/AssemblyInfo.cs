@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 //Set All Internal Access Modifiers Visible To Our Game Only.
-[assembly: InternalsVisibleTo("GAME")]
+[assembly: InternalsVisibleTo("GWTest")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("200c2b9b-3a0a-4679-a098-9bbabe50581e")]

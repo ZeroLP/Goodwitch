@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goodwitch.Modules;
 
 namespace Goodwitch
 {
@@ -10,7 +11,8 @@ namespace Goodwitch
     {
         internal static void Test()
         {
-            //Do Something...
+            if (KalidahsModule.IsDebuggerRunningPrcName() == true) Console.WriteLine("Debugger Is Running!");
+            Console.WriteLine("Debugger Is Not Running!");
         }
     }
 }
