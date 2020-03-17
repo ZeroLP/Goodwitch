@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\VirtualProtectionType.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Memory\Hooks\CreateThread.cs" />
+    <Compile Include="Memory\Hooks\Detour.cs" />
     <Compile Include="Modules\GlyndaModule.cs" />
     <Compile Include="Modules\KalidahsModule.cs" />
     <Compile Include="Modules\OscarModule.cs" />
@@ -51,8 +56,6 @@
     <Compile Include="Events\Process.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Events\" />
-    <Folder Include="Utils\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

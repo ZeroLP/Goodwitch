@@ -12,5 +12,7 @@ namespace Goodwitch.Utils
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool CheckRemoteDebuggerPresent(IntPtr hProcess, [MarshalAs(UnmanagedType.Bool)] ref bool isDebuggerPresent);
 
+        [DllImport("kernel32.dll")]
+        internal static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, Enums.VirtualProtectionType flNewProtect, out Enums.VirtualProtectionType lpflOldProtect);
     }
 }

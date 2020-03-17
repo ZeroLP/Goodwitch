@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Goodwitch.Modules
 {
     /// <summary>
-    /// Second Lowest Hierarchical Module(2)
+    /// Second Lowest Hierarchical Module(2) -  External memory modification and external related operation detection.
     /// </summary>
     internal class GlyndaModule
     {

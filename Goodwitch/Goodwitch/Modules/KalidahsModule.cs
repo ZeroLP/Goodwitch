@@ -38,18 +38,7 @@ namespace Goodwitch.Modules
 
         internal static bool IsDebuggerRunningPrcName()
         {
-            bool CheckFlag;
-
-            if (DebuggerList.Intersect(Utils.ProcessManager.EnumerateAllProcesses()).Any())
-            {
-                CheckFlag = true;
-            }
-            else
-            {
-                CheckFlag = false;
-            }
-
-            return CheckFlag;
+            return DebuggerList.Intersect(Utils.ProcessManager.EnumerateAllProcesses()).Any();
         }
 
         internal static bool IsDebuggerRunningHWND()
