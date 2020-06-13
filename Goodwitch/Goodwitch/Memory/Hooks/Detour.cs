@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Goodwitch.Utils;
 
 namespace Goodwitch.Memory.Hooks
@@ -46,12 +47,12 @@ namespace Goodwitch.Memory.Hooks
             }
         }
 
-        internal int CallOriginal(Delegate Original,  IntPtr args)
+        internal T CallOriginal<T>(Delegate Original,  params object[] args)
         {
             Uninstall();
             var ret = Original.DynamicInvoke(args);
             this.Install();
-            return (int)ret;
+            return (T)ret;
         }
 
         static void ProtectionSafeMemoryCopy(IntPtr dest, IntPtr source, int count)

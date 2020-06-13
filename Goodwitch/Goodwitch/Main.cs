@@ -11,12 +11,12 @@ namespace Goodwitch
 {
     internal class Main
     {
-        internal static void Test()
+        public static void Test()
         {
             OscarModule.EnumerateLoadedModules();
             OscarModule.EnumerateReferencedAssemblies();
-
-            Console.ReadLine();
+            Memory.Hooks.CreateThread.InstallHook();
+            Memory.Hooks.VirtualAlloc.InstallHook();
         }
     }
 }

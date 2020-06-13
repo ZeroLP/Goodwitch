@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,8 @@
     <Compile Include="Main.cs" />
     <Compile Include="Memory\Hooks\CreateThread.cs" />
     <Compile Include="Memory\Hooks\Detour.cs" />
+    <Compile Include="Memory\Hooks\VirtualAlloc.cs" />
+    <Compile Include="Memory\MemUtils.cs" />
     <Compile Include="Modules\GlyndaModule.cs" />
     <Compile Include="Modules\KalidahsModule.cs" />
     <Compile Include="Modules\OscarModule.cs" />
