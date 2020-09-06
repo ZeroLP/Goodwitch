@@ -13,10 +13,7 @@ namespace Goodwitch
     {
         public static void Test()
         {
-            OscarModule.EnumerateLoadedModules();
-            OscarModule.EnumerateReferencedAssemblies();
-            Memory.Hooks.CreateThread.InstallHook();
-            Memory.Hooks.VirtualAlloc.InstallHook();
+            new ModuleBase.Container().StartAllModules();
         }
     }
 }

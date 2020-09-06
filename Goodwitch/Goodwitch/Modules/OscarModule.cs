@@ -5,27 +5,75 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Reflection;
+using System.IO;
 
 namespace Goodwitch.Modules
 {
     /// <summary>
     /// Highest Hierarchical Module(1) - Detecting internal memory modification and memory related detection.
     /// </summary>
-    internal class OscarModule
+    internal class OscarModule : ModuleBase
     {
-        internal static void EnumerateReferencedAssemblies()
+        private List<Assembly> loadedSafeAssemblies;
+        private List<Assembly> abnormalLoadedAssemblies;
+
+        internal OscarModule()
         {
-            foreach(AssemblyName RefASM in Assembly.GetEntryAssembly().GetReferencedAssemblies())
-            {
-                Console.WriteLine($"{RefASM.FullName}");
-            }
+            loadedSafeAssemblies = new List<Assembly>();
+            abnormalLoadedAssemblies = new List<Assembly>();
         }
 
-        internal static void EnumerateLoadedModules()
+        internal override async void StartModule()
         {
-            foreach(ProcessModule PModule in Process.GetCurrentProcess().Modules)
+            await Task.Run(() => InstallHooks());
+            await Task.Run(() => ForceLoadAndStoreAllAssemblies());
+
+            await Task.Run(() => Utils.Time.Tick.OnTick += DetectAbnormalLoadings);
+
+            await Task.Run(() => base.StartModule());
+        }
+
+        private void InstallHooks()
+        {
+            Memory.Hooks.CreateThread.InstallHook();
+
+            //When called, it won't call DetectAbnormalLoadings()
+            //Memory.Hooks.VirtualAlloc.InstallHook();
+        }
+
+        private void ForceLoadAndStoreAllAssemblies()
+        {
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
+
+            var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
+
+            toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
+
+            loadedSafeAssemblies = loadedAssemblies;
+        }
+
+        private void DetectAbnormalLoadings()
+        {
+            if (loadedSafeAssemblies != null)
             {
-                Console.WriteLine($"{PModule.ModuleName}");
+                var appDomainASMList = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+                foreach (var asm in appDomainASMList)
+                {
+                    if (abnormalLoadedAssemblies.Contains(asm))
+                        continue;
+
+                    if (asm == appDomainASMList.Last() && loadedSafeAssemblies.Contains(asm))
+                        break;
+
+                    if (!loadedSafeAssemblies.Contains(asm))
+                    {
+                        Console.WriteLine($"Abnormal assembly: {asm} has been loaded.");
+                        abnormalLoadedAssemblies.Add(asm);
+                    }
+                }
             }
         }
     }

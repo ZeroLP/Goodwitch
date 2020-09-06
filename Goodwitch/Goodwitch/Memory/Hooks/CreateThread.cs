@@ -59,11 +59,6 @@ namespace Goodwitch.Memory.Hooks
             $"\ndwCreationFlags: {dwCreationFlags}" +
             $"\nlpThreadId: {lpThreadId}\n");
 
-            foreach(ProcessThread TH in Process.GetCurrentProcess().Threads)
-            {
-                Console.WriteLine($"ID: {TH.Id} | State: {TH.ThreadState} | BasePriority: {TH.BasePriority} | StartTime: {TH.StartTime} | StartAddress: 0x{TH.StartAddress.ToInt32().ToString("X")}");
-            }
-
             return pDetour.CallOriginal<uint>(OriginalInstance, new object[] { lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId });
         }
     }

@@ -48,7 +48,7 @@ namespace Goodwitch.Memory.Hooks
             Console.WriteLine("Installed VirtualAlloc Hook");
         }
 
-        private static IntPtr HookedVirtualAlloc(IntPtr lpAddress, IntPtr dwSize, uint flAllocationType, uint flProtect)
+        private static unsafe IntPtr HookedVirtualAlloc(IntPtr lpAddress, IntPtr dwSize, uint flAllocationType, uint flProtect)
         {
             Console.WriteLine
             ($"\nVirtualAlloc is being called." +

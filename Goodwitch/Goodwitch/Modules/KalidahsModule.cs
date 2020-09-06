@@ -10,20 +10,47 @@ namespace Goodwitch.Modules
     /// <summary>
     /// Lowest Hierarchical Module(3). Anti-Debugging and Process Detection.
     /// </summary>
-    internal class KalidahsModule
+    internal class KalidahsModule : ModuleBase
     {
         private static List<string> DebuggerList = new List<string>() { "OLLYDBG", "cheatengine-x86_64", "ReClassEx", "ReClassEx64", "x64dbg", "x32dbg", "IDA Pro", "Immunity Debugger", "Ghidra", "de4dot", "de4dot-x64", "ida", "ida64", "dotPeek64", "dotPeek32", "Fiddler", "dnSpy", "dnSpy-x86", "dnSpy.Console"};
         private static List<string> DebuggerWindowHandleList = new List<string>() { "Cheat Engine", "IDA", "IDA -", "JetBrains dotPeek", "OllyDbg", "x64dbg", "x32dbg", "Progress Telerik Fiddler", "dnSpy" };
         private static List<string> CheatList = new List<string>() { "" };
 
-        
-        internal static bool IsDebuggerAttached()
+        internal override void StartModule()
         {
-            return Utils.NativeImport.IsDebuggerPresent();
+            Utils.Time.Tick.OnTick += DetectDebuggers;
+
+            base.StartModule();
         }
 
-        internal static bool IsRemoteDebuggerAttached()
+        private void DetectDebuggers()
         {
+            if(IsDebuggerAttached() || IsRemoteDebuggerAttached()
+              || IsDebuggerRunningPrcName() || IsDebuggerRunningHWND())
+            {
+                throw new Exception();
+            }
+        }
+
+        private void DetectKnownCheatApplications()
+        {
+
+        }
+
+        private bool IsDebuggerAttached()
+        {
+#if DEBUG
+            return false;
+#else
+            return Utils.NativeImport.IsDebuggerPresent();
+#endif
+        }
+
+        private bool IsRemoteDebuggerAttached()
+        {
+#if DEBUG
+            return false;
+#else
             bool isDebuggerPresent = false;
 
             bool bApiRet = Utils.NativeImport.CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
@@ -34,15 +61,23 @@ namespace Goodwitch.Modules
             }
 
             return false;
+#endif
         }
 
-        internal static bool IsDebuggerRunningPrcName()
+        private bool IsDebuggerRunningPrcName()
         {
+#if DEBUG
+            return false;
+#else
             return DebuggerList.Intersect(Utils.ProcessManager.EnumerateAllProcesses()).Any();
+#endif
         }
 
-        internal static bool IsDebuggerRunningHWND()
+        private bool IsDebuggerRunningHWND()
         {
+#if DEBUG
+            return false;
+#else
             bool CheckFlag = false;
 
             foreach (string HWND in Utils.ProcessManager.EnumerateWindow())
@@ -51,6 +86,7 @@ namespace Goodwitch.Modules
             }
 
             return CheckFlag;
+#endif
         }
     }
 }
