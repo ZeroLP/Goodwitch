@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReportHandling\AbnormalLoadingDetection.cs" />
     <Compile Include="CommonUtils\Logger.cs" />
     <Compile Include="CommonUtils\NativeImport.cs" />
     <Compile Include="Program.cs" />

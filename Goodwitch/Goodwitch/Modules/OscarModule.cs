@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Reflection;
 using System.IO;
+using Goodwitch.CommonUtils;
 
 namespace Goodwitch.Modules
 {
@@ -66,6 +67,12 @@ namespace Goodwitch.Modules
                     {
                         Console.WriteLine($"Abnormal assembly: {asm} has been loaded.");
                         abnormalLoadedAssemblies.Add(asm);
+                        FlagRaiserService.RaiseFlag(Enums.DetectionFlags.ABNORMAL_LOADING_DETECTED, string.Concat(new string[]
+                        {
+                            asm.FullName,
+                            asm.Location,
+                            asm.ManifestModule.Name
+                        }));
                     }
                 }
             }

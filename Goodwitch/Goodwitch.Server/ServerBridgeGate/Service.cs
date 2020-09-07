@@ -19,6 +19,7 @@ namespace Goodwitch.Server.ServerBridgeGate
         private static TcpClient ClientSocket = default;
 
         private static List<TcpClient> ConnectedGoodwitchQueue = new List<TcpClient>();
+        private static Dictionary<string, Type> CommandLookuptable = new Dictionary<string, Type>();
 
         internal static async void StartServerAndListen()
         {
@@ -80,6 +81,21 @@ namespace Goodwitch.Server.ServerBridgeGate
                 Logger.Log($"Sucessfully disconnected all Goodwitch instances in queue. Exiting the auth server...");
             }
             else Logger.Log("No Goodwitch instances in queue to be disconnected. Exiting the auth server...");
+        }
+
+        //Main hub to handle all incoming reports besides from authentication
+        internal static void HandleIncomingReports(NetworkStream NStream)
+        {
+            var resp = ServerTelemetry.ReadPacket(NStream);
+
+            if (resp.Item1 && resp.Item2.StartsWith("GWReportType"))
+            {
+                /*if (resp.Item2.Contains("AbnormalLoadingDetected"))
+                {
+                    ReportHandling.AbnormalLoadingDetection.HandleDetection(resp.Item2);
+                }*/
+                ReportHandling.AbnormalLoadingDetection.HandleDetection(resp.Item2);
+            }
         }
 
         private static async void HandleGoodwitchConnection(object obj)

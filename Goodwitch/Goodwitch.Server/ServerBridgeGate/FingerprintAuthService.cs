@@ -26,11 +26,13 @@ namespace Goodwitch.Server.ServerBridgeGate
             if (fpDB["Fingerprints"].Contains(new Dictionary<string, object>() { { Fingerprint, "" } }))
             {
                 ServerTelemetry.SendPacket(NStream, "ValidGoodwitchFingerprint");
+                Service.HandleIncomingReports(NStream);
             }
             else
             {
                 RegisterFingerprint(fpDB, Fingerprint);
                 ServerTelemetry.SendPacket(NStream, "GoodwitchFingerprintRegistered");
+                Service.HandleIncomingReports(NStream);
             }
         }
 

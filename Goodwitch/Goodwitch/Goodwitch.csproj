@@ -91,7 +91,9 @@
     <Compile Include="ClientBridgeGate\ClientTelemetry.cs" />
     <Compile Include="ClientBridgeGate\FingerprintService.cs" />
     <Compile Include="ClientBridgeGate\Service.cs" />
+    <Compile Include="CommonUtils\FlagRaiserService.cs" />
     <Compile Include="CommonUtils\Logger.cs" />
+    <Compile Include="CommonUtils\Reporter.cs" />
     <Compile Include="Enums\DetectionFlags.cs" />
     <Compile Include="Enums\VirtualProtectionType.cs" />
     <Compile Include="Main.cs" />

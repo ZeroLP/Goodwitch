@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Goodwitch.Enums
 {
-    internal enum DetectionFlags
+    internal class DetectionFlags
     {
-
+        internal const string ABNORMAL_LOADING_DETECTED = "AbnormalLoadingDetected";
     }
 }
