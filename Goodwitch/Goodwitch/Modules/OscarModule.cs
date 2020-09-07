@@ -25,20 +25,14 @@ namespace Goodwitch.Modules
 
         internal override async void StartModule()
         {
-            await Task.Run(() => InstallHooks());
             await Task.Run(() => ForceLoadAndStoreAllAssemblies());
 
-            await Task.Run(() => Utils.Time.Tick.OnTick += DetectAbnormalLoadings);
+            await Task.Run(() => {
+
+                CommonUtils.Time.Tick.OnTick += DetectAbnormalLoadings;
+            });
 
             await Task.Run(() => base.StartModule());
-        }
-
-        private void InstallHooks()
-        {
-            Memory.Hooks.CreateThread.InstallHook();
-
-            //When called, it won't call DetectAbnormalLoadings()
-            //Memory.Hooks.VirtualAlloc.InstallHook();
         }
 
         private void ForceLoadAndStoreAllAssemblies()

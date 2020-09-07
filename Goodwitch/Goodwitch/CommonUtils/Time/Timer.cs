@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Goodwitch.Utils.Time
+namespace Goodwitch.CommonUtils.Time
 {
     class Timer
     {

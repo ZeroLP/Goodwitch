@@ -7,7 +7,7 @@ namespace GWTest
     {
         public static void Main(string[] args)
         {
-            Goodwitch.Main.Test();
+            Goodwitch.Main.InitialiseGoodwitch();
 
             /*Assembly ASM = Assembly.Load(System.IO.File.ReadAllBytes(@"C:\Users\stubl\Desktop\Project Goodwitch\Goodwitch\Goodwitch\bin\Debug\Goodwitch.dll"));
 

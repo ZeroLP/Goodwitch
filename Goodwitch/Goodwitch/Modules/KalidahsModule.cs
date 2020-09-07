@@ -18,7 +18,7 @@ namespace Goodwitch.Modules
 
         internal override void StartModule()
         {
-            Utils.Time.Tick.OnTick += DetectDebuggers;
+            CommonUtils.Time.Tick.OnTick += DetectDebuggers;
 
             base.StartModule();
         }

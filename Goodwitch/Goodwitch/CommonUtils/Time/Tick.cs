@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Goodwitch.Utils.Time
+namespace Goodwitch.CommonUtils.Time
 {
     public delegate void TickElapsedEvent();
 

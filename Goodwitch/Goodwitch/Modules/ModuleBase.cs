@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goodwitch.CommonUtils;
 
 namespace Goodwitch.Modules
 {
@@ -16,19 +17,34 @@ namespace Goodwitch.Modules
 
             internal Container()
             {
-                InitialisedModules = new List<ModuleBase>()
+                try
                 {
-                    new KalidahsModule(),
-                    new GlyndaModule(),
-                    new OscarModule()
-                };
+                    InitialisedModules = new List<ModuleBase>()
+                    {
+                       new KalidahsModule(),
+                       new GlyndaModule(),
+                       new OscarModule()
+                    };
+                }
+                catch(Exception Ex)
+                {
+                    Logger.Log($"Exception occured while initialising module base: {Ex.Message}", Logger.LogSeverity.Danger);
+                }
             }
 
             internal void StartAllModules()
             {
-                foreach (var module in InitialisedModules)
+                try
                 {
-                    module.StartModule();
+                    foreach (var module in InitialisedModules)
+                    {
+                        Logger.Log($"Starting module: {module.GetType().Name}...");
+                        module.StartModule();
+                    }
+                }
+                catch(Exception Ex)
+                {
+                    Logger.Log($"Exception occured while starting modules: {Ex.Message}", Logger.LogSeverity.Danger);
                 }
             }
         }
