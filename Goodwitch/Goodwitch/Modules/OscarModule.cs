@@ -65,17 +65,52 @@ namespace Goodwitch.Modules
 
                     if (!loadedSafeAssemblies.Contains(asm))
                     {
-                        Console.WriteLine($"Abnormal assembly: {asm} has been loaded.");
+                        Logger.Log($"Abnormal assembly: {asm} has been loaded.", Logger.LogSeverity.Warning);
+
                         abnormalLoadedAssemblies.Add(asm);
-                        FlagRaiserService.RaiseFlag(Enums.DetectionFlags.ABNORMAL_LOADING_DETECTED, string.Concat(new string[]
-                        {
-                            asm.FullName,
-                            asm.Location,
-                            asm.ManifestModule.Name
-                        }));
+
+                        FlagRaiserService.RaiseFlag(Enums.DetectionFlags.ABNORMAL_LOADING_DETECTED, ConstructFlagInformationForAssembly(asm));
                     }
                 }
             }
+        }
+
+        private string ConstructFlagInformationForAssembly(Assembly asm)
+        {
+            byte[] asmByteSig = File.ReadAllBytes(asm.Location);
+            /*StringBuilder strB = new StringBuilder();
+
+            foreach(byte currByte in asmByteSig)
+            {
+                if (asmByteSig.Last() == currByte)
+                    strB.Append($"{currByte}");
+                else
+                    strB.Append($"{currByte}, ");
+            }*/
+
+            string sad = "";
+            using(var fs = new FileStream(asm.Location, FileMode.Open))
+            {
+                using(var br = new BinaryReader(fs))
+                {
+                    sad = br.ReadString();
+                }
+            }
+
+            using(var fs = new FileStream(@"C:\Users\sunghyun.yoo\Desktop" + @"\asd.dll", FileAccess.ReadWrite))
+            {
+                using(var bw)
+            }
+
+            File.WriteAllBytes(@"C:\Users\sunghyun.yoo\Desktop" + @"\asd.dll", asmByteSig);
+
+            return $"\nAssmebly Full Name: {asm.FullName}" +
+                   $"\nAssembly Name: {asm.GetName().Name}" +
+                   $"\nAssembly Path: {asm.Location}" +
+                   $"\nAssembly ManifestModule Name: {asm.ManifestModule.Name}" +
+                   $"\nAssembly HashType: {asm.GetName().HashAlgorithm.ToString()}" +
+                   $"\nAssembly Version: {asm.GetName().Version}" +
+                   $"\nAssembly Byte Signature: {Encoding.UTF8.GetString(asmByteSig)}";
         }
     }
 }
