@@ -90,11 +90,10 @@ namespace Goodwitch.Server.ServerBridgeGate
 
             if (resp.Item1 && resp.Item2.StartsWith("GWReportType"))
             {
-                /*if (resp.Item2.Contains("AbnormalLoadingDetected"))
+                if (resp.Item2.Contains("GWReportType: AbnormalLoadingDetected"))
                 {
                     ReportHandling.AbnormalLoadingDetection.HandleDetection(resp.Item2);
-                }*/
-                ReportHandling.AbnormalLoadingDetection.HandleDetection(resp.Item2);
+                }
             }
         }
 

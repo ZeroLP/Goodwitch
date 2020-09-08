@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO;
+using Goodwitch.CommonUtils;
 
 namespace Goodwitch.Modules
 {
@@ -14,11 +16,12 @@ namespace Goodwitch.Modules
     {
         private static List<string> DebuggerList = new List<string>() { "OLLYDBG", "cheatengine-x86_64", "ReClassEx", "ReClassEx64", "x64dbg", "x32dbg", "IDA Pro", "Immunity Debugger", "Ghidra", "de4dot", "de4dot-x64", "ida", "ida64", "dotPeek64", "dotPeek32", "Fiddler", "dnSpy", "dnSpy-x86", "dnSpy.Console"};
         private static List<string> DebuggerWindowHandleList = new List<string>() { "Cheat Engine", "IDA", "IDA -", "JetBrains dotPeek", "OllyDbg", "x64dbg", "x32dbg", "Progress Telerik Fiddler", "dnSpy" };
-        private static List<string> CheatList = new List<string>() { "" };
+        private static List<string> CheatProcessByteSignature = new List<string>() { };
 
         internal override void StartModule()
         {
             CommonUtils.Time.Tick.OnTick += DetectDebuggers;
+            CommonUtils.Time.Tick.OnTick += DetectKnownCheatApplications;
 
             base.StartModule();
         }
@@ -28,13 +31,28 @@ namespace Goodwitch.Modules
             if(IsDebuggerAttached() || IsRemoteDebuggerAttached()
               || IsDebuggerRunningPrcName() || IsDebuggerRunningHWND())
             {
-                throw new Exception();
+                BanMessageDisplayer.DisplayBanMessage();
             }
         }
 
         private void DetectKnownCheatApplications()
         {
+            try
+            {
+                foreach (var proc in Process.GetProcesses())
+                {
+                    string currASMBytes = Convert.ToBase64String(File.ReadAllBytes(proc.MainModule.FileName));
 
+                    foreach (var detectedSignature in CheatProcessByteSignature)
+                    {
+                        if (currASMBytes.Contains(detectedSignature))
+                        {
+                            BanMessageDisplayer.DisplayBanMessage();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { }
         }
 
         private bool IsDebuggerAttached()
@@ -42,7 +60,7 @@ namespace Goodwitch.Modules
 #if DEBUG
             return false;
 #else
-            return Utils.NativeImport.IsDebuggerPresent();
+            return NativeImport.IsDebuggerPresent();
 #endif
         }
 
@@ -53,7 +71,7 @@ namespace Goodwitch.Modules
 #else
             bool isDebuggerPresent = false;
 
-            bool bApiRet = Utils.NativeImport.CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
+            bool bApiRet = NativeImport.CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
 
             if (bApiRet && isDebuggerPresent)
             {
@@ -69,7 +87,7 @@ namespace Goodwitch.Modules
 #if DEBUG
             return false;
 #else
-            return DebuggerList.Intersect(Utils.ProcessManager.EnumerateAllProcesses()).Any();
+            return DebuggerList.Intersect(ProcessManager.EnumerateAllProcesses()).Any();
 #endif
         }
 
@@ -80,7 +98,7 @@ namespace Goodwitch.Modules
 #else
             bool CheckFlag = false;
 
-            foreach (string HWND in Utils.ProcessManager.EnumerateWindow())
+            foreach (string HWND in ProcessManager.EnumerateWindow())
             {
                 CheckFlag |= (DebuggerWindowHandleList.Any(HWND.Contains) || DebuggerWindowHandleList.ConvertAll(d => d.ToLower()).Any(HWND.Contains));
             }

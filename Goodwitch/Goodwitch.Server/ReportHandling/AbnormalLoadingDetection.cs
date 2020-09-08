@@ -11,7 +11,8 @@ namespace Goodwitch.Server.ReportHandling
     {
         internal static void HandleDetection(string flaggedInformation)
         {
-            Logger.Log($"instance was flagged for abnormal detection, reported information: {flaggedInformation}", Logger.LogSeverity.Warning);
+            Logger.Log($"Instance was flagged for abnormal loading detection.", Logger.LogSeverity.Warning);
+            ReportHandlerBase.WriteToLogFile($"reported information: {flaggedInformation}");
         }
     }
 }

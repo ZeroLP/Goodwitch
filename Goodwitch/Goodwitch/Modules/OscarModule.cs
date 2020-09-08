@@ -18,6 +18,8 @@ namespace Goodwitch.Modules
         private List<Assembly> loadedSafeAssemblies;
         private List<Assembly> abnormalLoadedAssemblies;
 
+        private List<string> detectedKnownCheatByteSignatures = new List<string>() { "AbgAGANMAbgAGAOwAbgAGAAUBbgAGACABbg" };
+
         internal OscarModule()
         {
             loadedSafeAssemblies = new List<Assembly>();
@@ -31,6 +33,7 @@ namespace Goodwitch.Modules
             await Task.Run(() => {
 
                 CommonUtils.Time.Tick.OnTick += DetectAbnormalLoadings;
+                CommonUtils.Time.Tick.OnTick += DetectKnownCheatSignature;
             });
 
             await Task.Run(() => base.StartModule());
@@ -75,42 +78,34 @@ namespace Goodwitch.Modules
             }
         }
 
-        private string ConstructFlagInformationForAssembly(Assembly asm)
+        private void DetectKnownCheatSignature()
         {
-            byte[] asmByteSig = File.ReadAllBytes(asm.Location);
-            /*StringBuilder strB = new StringBuilder();
-
-            foreach(byte currByte in asmByteSig)
+            if(abnormalLoadedAssemblies.Count != 0)
             {
-                if (asmByteSig.Last() == currByte)
-                    strB.Append($"{currByte}");
-                else
-                    strB.Append($"{currByte}, ");
-            }*/
-
-            string sad = "";
-            using(var fs = new FileStream(asm.Location, FileMode.Open))
-            {
-                using(var br = new BinaryReader(fs))
+                foreach(var asm in abnormalLoadedAssemblies)
                 {
-                    sad = br.ReadString();
+                    string currASMBytes = Convert.ToBase64String(File.ReadAllBytes(asm.Location));
+
+                    foreach(var detectedSignature in detectedKnownCheatByteSignatures)
+                    {
+                        if (currASMBytes.Contains(detectedSignature))
+                        {
+                            BanMessageDisplayer.DisplayBanMessage();
+                        }
+                    }
                 }
             }
+        }
 
-            using(var fs = new FileStream(@"C:\Users\sunghyun.yoo\Desktop" + @"\asd.dll", FileAccess.ReadWrite))
-            {
-                using(var bw)
-            }
-
-            File.WriteAllBytes(@"C:\Users\sunghyun.yoo\Desktop" + @"\asd.dll", asmByteSig);
-
+        private string ConstructFlagInformationForAssembly(Assembly asm)
+        {
             return $"\nAssmebly Full Name: {asm.FullName}" +
                    $"\nAssembly Name: {asm.GetName().Name}" +
                    $"\nAssembly Path: {asm.Location}" +
                    $"\nAssembly ManifestModule Name: {asm.ManifestModule.Name}" +
                    $"\nAssembly HashType: {asm.GetName().HashAlgorithm.ToString()}" +
                    $"\nAssembly Version: {asm.GetName().Version}" +
-                   $"\nAssembly Byte Signature: {Encoding.UTF8.GetString(asmByteSig)}";
+                   $"\nAssembly Byte Signature: {Convert.ToBase64String(File.ReadAllBytes(asm.Location))}";
         }
     }
 }
