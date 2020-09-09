@@ -38,6 +38,16 @@ namespace Goodwitch.CommonUtils
         [DllImport("user32.dll")]
         internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("kernel32.dll")]
+        internal static extern IntPtr OpenThread(Enums.ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+
+        [DllImport("kernel32.dll")]
+        internal static extern uint SuspendThread(IntPtr hThread);
+        [DllImport("kernel32.dll")]
+        internal static extern int ResumeThread(IntPtr hThread);
+        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern bool CloseHandle(IntPtr handle);
+
         internal class ConsolePropertyModifiers
         {
             internal const int SW_HIDE = 0;

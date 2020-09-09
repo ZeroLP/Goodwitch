@@ -18,7 +18,7 @@ namespace Goodwitch.Modules
         private List<Assembly> loadedSafeAssemblies;
         private List<Assembly> abnormalLoadedAssemblies;
 
-        private List<string> detectedKnownCheatByteSignatures = new List<string>() { "AbgAGANMAbgAGAOwAbgAGAAUBbgAGACABbg" };
+        private List<string> detectedKnownCheatByteSignatures = new List<string>() { "XB0aW9uVGhyb3dzARIBAA1D" };
 
         internal OscarModule()
         {

@@ -97,10 +97,11 @@
     <Compile Include="CommonUtils\FlagRaiserService.cs" />
     <Compile Include="CommonUtils\Logger.cs" />
     <Compile Include="CommonUtils\Reporter.cs" />
+    <Compile Include="CommonUtils\ThreadUtils.cs" />
     <Compile Include="Enums\DetectionFlags.cs" />
+    <Compile Include="Enums\ThreadAccess.cs" />
     <Compile Include="Enums\VirtualProtectionType.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Modules\GlyndaModule.cs" />
     <Compile Include="Modules\KalidahsModule.cs" />
     <Compile Include="Modules\ModuleBase.cs" />
     <Compile Include="Modules\OscarModule.cs" />

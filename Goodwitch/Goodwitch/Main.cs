@@ -10,26 +10,30 @@ using Goodwitch.CommonUtils;
 
 namespace Goodwitch
 {
-    internal class Main
+    public class Main
     {
-        public static async void InitialiseGoodwitch()
+        public static Tuple<bool, string> InitialiseGoodwitch()
         {
-            await Task.Run(() => Logger.CreateLoggerInstance());
+            Tuple<bool, string> retVal = null;
 
-            await Task.Run(() => {
+            Task.Run(async () => {
 
-                var authRes = ClientBridgeGate.Service.AuthenticateGoodwitchInstance();
+                 await Task.Run(() => {
 
-                if (!authRes.Item1)
-                {
-                    Logger.Log(authRes.Item2, Logger.LogSeverity.Danger);
-                    Console.Read();
+                     var authRes = ClientBridgeGate.Service.AuthenticateGoodwitchInstance();
 
-                    Environment.Exit(0);
-                }
-            });
+                     if (!authRes.Item1)
+                     {
+                         retVal = authRes;
+                     }
+                     else
+                         Logger.CreateLoggerInstance();
+                         new ModuleBase.Container().StartAllModules();
+                 });
 
-            await Task.Run(() => new ModuleBase.Container().StartAllModules());
+             }).GetAwaiter().GetResult();
+
+            return retVal ?? new Tuple<bool, string>(true, "");
         }
     }
 }

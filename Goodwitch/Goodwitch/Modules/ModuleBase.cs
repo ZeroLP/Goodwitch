@@ -22,7 +22,6 @@ namespace Goodwitch.Modules
                     InitialisedModules = new List<ModuleBase>()
                     {
                        new KalidahsModule(),
-                       new GlyndaModule(),
                        new OscarModule()
                     };
                 }

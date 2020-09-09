@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Windows.Forms;
+using System.Threading;
+using Goodwitch.CommonUtils;
 
 namespace Goodwitch.ClientBridgeGate
 {
@@ -47,7 +50,10 @@ namespace Goodwitch.ClientBridgeGate
                 var CheckedGFP = CheckGoodwitchFingerprint();
 
                 if (CheckedGFP.Item1 == true)
+                {
+                    CommonUtils.Time.Tick.OnTick += GoodwitchHeartbeatCallback;
                     return CheckedGFP;
+                }
                 else return CheckedGFP;
             }
             else return ConnectionToAuth;
@@ -74,6 +80,23 @@ namespace Goodwitch.ClientBridgeGate
                 else return RecievedPacket;
             }
             else return SentPacket;
+        }
+
+        private static void GoodwitchHeartbeatCallback()
+        {
+            if (!Extension.IsConnected(ServerSocket.Client))
+            {
+                var mBoxThread = new Thread(() =>
+                {
+                    var mBoxRes = MessageBox.Show("Heartbeat roundtrip failed.", "Goodwitch Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    if (mBoxRes == DialogResult.OK)
+                        Environment.Exit(0);
+                });
+
+                mBoxThread.Start();
+                ThreadUtils.SuspendProcess();
+            }
         }
 
         private class Extension
