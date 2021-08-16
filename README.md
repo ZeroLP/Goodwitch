@@ -1,4 +1,4 @@
-# Goodwitch - Work In Progress
+# Goodwitch
 Full Project Name: Project Goodwitch - Full Scale C# Anti-Cheat
 
 # What is Goodwitch?
